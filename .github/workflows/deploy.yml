@@ -27,12 +27,12 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Prepare site
-        run: cp uploads/Login.html uploads/index.html
+        run: cp "PKL Boost - User Stories.html" index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: uploads
+          path: .
 
       - id: deployment
         name: Deploy to GitHub Pages
