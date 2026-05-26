@@ -1533,7 +1533,7 @@ function DashboardView({ onCreateCampaign, onNavigate, onOpenCreatorProgram, cam
 
         {/* CREATOR — EARNINGS TREND + FOLLOWERS CARD + ACTIVITY FEED */}
         {showCreatorContent &&
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 16, marginBottom: 20, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 16, marginBottom: 20, alignItems: 'stretch' }}>
           <EarningsTrendChart
             data={EARNINGS_TREND}
             total={EARNINGS_TREND.reduce((s, v) => s + v, 0)}
@@ -3570,7 +3570,7 @@ function TierProgressionCard({ currentTier, onOpenProgram }) {
 // ─── FOLLOWERS CARD ───────────────────────────────────────────────────────────
 function FollowersCard() {
   return (
-    <div className="followers-card">
+    <div className="followers-card" style={{ height: '100%' }}>
       <div className="followers-head">
         <div>
           <div className="stat-label">Followers · last 30d</div>
