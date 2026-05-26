@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PKL Place — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #1a1a2e; min-height: 100vh; overflow-x: hidden; }
+
+  .login-page { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 100vh; }
+
+  /* ─── LEFT (hero) ─── */
+  .hero-pane {
+    position: relative;
+    background: radial-gradient(circle at 20% 10%, #4a1414 0%, #1a0808 55%, #0a0303 100%);
+    overflow: hidden;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 48px;
+  }
+  /* Decorative pickleball pattern */
+  .hero-pane::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 25% 35%, rgba(220,38,38,.18) 0%, transparent 38%),
+      radial-gradient(circle at 80% 75%, rgba(220,38,38,.22) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .hero-pane::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 80%, #fff 0.6px, transparent 0.7px),
+      radial-gradient(circle at 35% 20%, #fff 0.6px, transparent 0.7px),
+      radial-gradient(circle at 70% 50%, #fff 0.6px, transparent 0.7px),
+      radial-gradient(circle at 88% 18%, #fff 0.5px, transparent 0.6px),
+      radial-gradient(circle at 55% 88%, #fff 0.5px, transparent 0.6px);
+    background-size: 320px 320px, 280px 280px, 360px 360px, 240px 240px, 300px 300px;
+    opacity: .25;
+    pointer-events: none;
+  }
+
+  .hero-top {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand-lockup {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-lockup img.brand-icon { height: 34px; width: 34px; filter: drop-shadow(0 4px 12px rgba(220,38,38,.4)); }
+  .brand-lockup img.brand-wordmark { height: 26px; width: auto; display: block; filter: drop-shadow(0 4px 12px rgba(0,0,0,.45)); }
+  .brand-lockup .pill-portal {
+    font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    padding: 4px 10px; border-radius: 999px;
+    color: rgba(255,255,255,.75);
+  }
+  .hero-help { font-size: 13px; color: rgba(255,255,255,.65); }
+  .hero-help a { color: #FCA5A5; text-decoration: none; font-weight: 600; margin-left: 6px; }
+  .hero-help a:hover { color: #fff; }
+
+  .hero-center {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: 28px;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+  .hero-image-frame {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 820/310;
+    align-self: center;
+  }
+  .hero-image-frame .img-wrap {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  }
+  .hero-image-frame .img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-image-frame .court-ring {
+    position: absolute;
+    height: 240%;
+    aspect-ratio: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px dashed rgba(220,38,38,.35);
+    border-radius: 50%;
+    animation: spin 60s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-image-frame .glow-orb {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(220,38,38,.55) 0%, transparent 70%);
+    top: -10%;
+    right: -10%;
+    filter: blur(20px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  @keyframes spinReverse { from { transform: rotate(360deg); } to { transform: rotate(0); } }
+
+  /* Decorative dashed rings scattered across the hero pane */
+  .deco-ring {
+    position: absolute;
+    border-radius: 50%;
+    border-style: dashed;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .deco-ring.r1 {
+    width: 260px; height: 260px;
+    top: -80px; right: -90px;
+    border: 2px dashed rgba(220,38,38,.32);
+    animation: spin 80s linear infinite;
+  }
+  .deco-ring.r2 {
+    width: 460px; height: 460px;
+    bottom: -180px; left: -160px;
+    border: 1.5px dashed rgba(252,165,165,.18);
+    animation: spinReverse 120s linear infinite;
+  }
+  .deco-ring.r3 {
+    width: 120px; height: 120px;
+    top: 36%; left: 8%;
+    border: 1.5px dashed rgba(252,165,165,.22);
+    animation: spin 50s linear infinite;
+  }
+  .deco-ring.r4 {
+    width: 180px; height: 180px;
+    top: 10%; left: 40%;
+    border: 1px dashed rgba(255,255,255,.1);
+    animation: spinReverse 90s linear infinite;
+  }
+  .deco-ring.r5 {
+    width: 90px; height: 90px;
+    bottom: 22%; right: 18%;
+    border: 1.5px dashed rgba(220,38,38,.4);
+    animation: spin 40s linear infinite;
+  }
+  .deco-ring.r6 {
+    width: 340px; height: 340px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px dashed rgba(255,255,255,.06);
+    animation: spin 200s linear infinite;
+  }
+  .deco-ring.r7 {
+    width: 60px; height: 60px;
+    top: 18%; right: 24%;
+    border: 1.5px dashed rgba(252,165,165,.3);
+    animation: spinReverse 30s linear infinite;
+  }
+
+  .hero-copy { max-width: 480px; align-self: center; text-align: center; position: relative; z-index: 2; }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: #FCA5A5; margin-bottom: 12px;
+  }
+  .hero-title {
+    font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 12px;
+    letter-spacing: -.01em;
+  }
+  .hero-title .accent { color: #EF4444; }
+  .hero-sub { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.7); }
+
+  .hero-bottom {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; gap: 24px;
+    font-size: 12px; color: rgba(255,255,255,.55);
+  }
+  .hero-stat {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-stat strong { color: #fff; font-weight: 700; font-size: 14px; }
+  .hero-stat-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.3); }
+
+  /* ─── RIGHT (form) ─── */
+  .form-pane {
+    background: #fff;
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .form-pane-inner {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .form-mobile-brand { display: none; }
+  .form-heading {
+    font-size: 28px; font-weight: 800; color: #1a1a2e; margin-bottom: 8px;
+    letter-spacing: -.01em;
+  }
+  .form-sub { font-size: 14px; color: #6B7280; margin-bottom: 32px; }
+
+  .field { margin-bottom: 16px; }
+  .field-label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .field-input-wrap { position: relative; }
+  .field-input {
+    width: 100%; height: 44px; padding: 0 14px;
+    font-size: 14px; font-family: inherit; color: #1a1a2e;
+    background: #fff; border: 1.5px solid #E5E7EB; border-radius: 10px;
+    outline: none; transition: all .15s;
+  }
+  .field-input:focus { border-color: #DC2626; box-shadow: 0 0 0 3px #FEE2E2; }
+  .field-input::placeholder { color: #9CA3AF; }
+  .field-input.with-icon { padding-left: 42px; }
+  .field-input.with-action { padding-right: 44px; }
+  .field-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: #9CA3AF; pointer-events: none;
+  }
+  .field-action {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: #9CA3AF; padding: 4px;
+    border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .field-action:hover { color: #4B5563; background: #F3F4F6; }
+
+  .field-helper {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  .remember-me { display: inline-flex; align-items: center; gap: 6px; color: #4B5563; font-weight: 500; cursor: pointer; user-select: none; }
+  .remember-me input { width: 14px; height: 14px; accent-color: #DC2626; cursor: pointer; }
+  .forgot-link { color: #DC2626; font-weight: 600; text-decoration: none; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  .signin-btn {
+    width: 100%; height: 46px;
+    background: #DC2626; color: #fff; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .15s;
+    margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(220,38,38,.32);
+  }
+  .signin-btn:hover { background: #B91C1C; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(220,38,38,.42); }
+  .signin-btn:active { transform: translateY(0); }
+  .signin-btn .arr { transition: transform .2s; }
+  .signin-btn:hover .arr { transform: translateX(3px); }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 24px 0; color: #9CA3AF; font-size: 12px; font-weight: 500;
+  }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; }
+
+  .google-btn {
+    width: 100%; height: 46px;
+    background: #fff; color: #374151;
+    border: 1.5px solid #E5E7EB; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all .15s;
+  }
+  .google-btn:hover { background: #F9FAFB; border-color: #D0D5DD; }
+  .google-btn svg { width: 18px; height: 18px; }
+
+  .footer-cta {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .footer-cta a {
+    color: #DC2626; font-weight: 700; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .footer-cta a:hover { text-decoration: underline; }
+  .footer-cta .hint {
+    margin-top: 6px; font-size: 11px; color: #9CA3AF; font-style: italic;
+  }
+
+  .form-foot {
+    position: absolute; bottom: 24px; left: 56px; right: 56px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: #9CA3AF;
+  }
+  .form-foot a { color: #6B7280; text-decoration: none; }
+  .form-foot a:hover { color: #DC2626; }
+
+  /* ─── ACCOUNT TYPE STEP ─── */
+  .account-step {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+    animation: fadeUp .28s ease;
+  }
+  .account-step.visible { display: flex; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .account-step-label {
+    font-size: 13px; font-weight: 600; color: #374151;
+    text-align: center; margin-bottom: 2px;
+  }
+  .account-step-sub {
+    font-size: 12px; color: #9CA3AF; text-align: center; margin-top: -6px; margin-bottom: 6px;
+  }
+  .account-type-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .account-type-btn {
+    height: 56px; border-radius: 10px;
+    border: 1.5px solid #E5E7EB;
+    background: #fff; color: #1a1a2e;
+    font-size: 14px; font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .15s;
+  }
+  .account-type-btn:hover { border-color: #DC2626; background: #FEF2F2; color: #DC2626; transform: translateY(-1px); }
+  .account-type-btn.primary { background: #DC2626; color: #fff; border-color: #DC2626; box-shadow: 0 4px 14px rgba(220,38,38,.28); }
+  .account-type-btn.primary:hover { background: #B91C1C; border-color: #B91C1C; }
+  .step-back { text-align: center; font-size: 12px; color: #9CA3AF; cursor: pointer; margin-top: 2px; }
+  .step-back:hover { color: #DC2626; }
+
+  /* Mobile / narrow */
+  @media (max-width: 880px) {
+    .login-page { grid-template-columns: 1fr; }
+    .hero-pane { display: none; }
+    .form-pane { padding: 32px 24px; }
+    .form-mobile-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; justify-content: center; }
+    .form-mobile-brand img { height: 32px; }
+    .form-foot { left: 24px; right: 24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="login-page">
+    <!-- ─── LEFT: HERO ─── -->
+    <div class="hero-pane">
+      <!-- Scattered decorative rings -->
+      <span class="deco-ring r1"></span>
+      <span class="deco-ring r2"></span>
+      <span class="deco-ring r3"></span>
+      <span class="deco-ring r4"></span>
+      <span class="deco-ring r5"></span>
+      <span class="deco-ring r6"></span>
+      <span class="deco-ring r7"></span>
+      <div class="hero-top">
+        <div class="brand-lockup">
+          <img src="pkl-colored-icon.png" alt="" class="brand-icon" />
+          <img src="pkl-life-logo.svg" alt="PKL Life" class="brand-wordmark" style="margin: 0px 0px 0px -30px" />
+          <span class="pill-portal">Partner Portal</span>
+        </div>
+        <div class="hero-help">
+          Need help?
+          <a href="#">Contact Support</a>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <div class="hero-image-frame">
+          <div class="court-ring"></div>
+          <div class="glow-orb"></div>
+          <div class="img-wrap">
+            <img src="pkl-life-cover.png" alt="Living the PKL Life" />
+          </div>
+        </div>
+        <div class="hero-copy">
+          <div class="hero-sub">
+            Boost posts, track campaigns, and earn from fan tips and qualified views — all from one place.
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-stat"><strong>2,400+</strong> creators earning</div>
+        <span class="hero-stat-dot"></span>
+        <div class="hero-stat"><strong>₱4.8M</strong> paid out this quarter</div>
+        <span class="hero-stat-dot"></span>
+        <div class="hero-stat"><strong>180+</strong> active campaigns</div>
+      </div>
+    </div>
+
+    <!-- ─── RIGHT: FORM ─── -->
+    <div class="form-pane">
+      <div class="form-pane-inner">
+        <div class="form-mobile-brand">
+          <img src="pkl-colored-icon.png" alt="" class="brand-icon" />
+          <img src="pkl-life-logo.svg" alt="PKL Life" class="brand-wordmark" />
+        </div>
+
+        <h1 class="form-heading">Welcome back 👋</h1>
+        <p class="form-sub">Sign in to manage your campaigns &amp; creator earnings.</p>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="field">
+            <label class="field-label" for="email">Email address</label>
+            <div class="field-input-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input
+                type="email"
+                id="email"
+                class="field-input with-icon"
+                placeholder="you@pklplace.com"
+                value="marcos@pklplace.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="password">Password</label>
+            <div class="field-input-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input
+                type="password"
+                id="password"
+                class="field-input with-icon with-action"
+                placeholder="Enter your password"
+                value="demo-password"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="field-action" id="togglePw" aria-label="Show password">
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="field-helper">
+              <label class="remember-me">
+                <input type="checkbox" id="remember" checked />
+                Keep me signed in
+              </label>
+              <a class="forgot-link" href="#">Forgot password?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="signin-btn" id="signInBtn">
+            Sign in to Partner Portal
+            <span class="arr">→</span>
+          </button>
+
+          <!-- Account type picker — shown after sign-in -->
+          <div class="account-step" id="accountStep">
+            <div class="account-step-label">You're in — choose your account</div>
+            <div class="account-step-sub">Two separate experiences, same portal.</div>
+            <div class="account-type-btns">
+              <button class="account-type-btn primary" onclick="enterAs('Creator')">
+                🎬 Creator
+              </button>
+              <button class="account-type-btn" onclick="enterAs('Advertiser')">
+                📢 Advertiser
+              </button>
+            </div>
+            <div class="step-back" onclick="resetStep()">← Back</div>
+          </div>
+
+          <div class="divider">or continue with</div>
+
+          <button type="button" class="google-btn" id="googleBtn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+          </button>
+
+        </form>
+
+        <div class="footer-cta">
+          New to PKL Place?
+          <a href="#">Sign up in the app <span>↗</span></a>
+          <div class="hint">Creator &amp; advertiser accounts are created in the PKL Place mobile app.</div>
+        </div>
+      </div>
+
+      <div class="form-foot">
+        <span>© 2026 PKLLife by PKLPlace</span>
+        <span>
+          <a href="#">Terms</a>
+          <span style="margin: 0 8px;">·</span>
+          <a href="#">Privacy</a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Password show/hide
+  const pwInput = document.getElementById('password');
+  const togglePw = document.getElementById('togglePw');
+  togglePw.addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+    togglePw.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+    const icon = document.getElementById('eyeIcon');
+    icon.innerHTML = isPw
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
+  // Show account type picker instead of going straight to dashboard
+  const showAccountStep = () => {
+    const btn = document.getElementById('signInBtn');
+    const step = document.getElementById('accountStep');
+    btn.style.display = 'none';
+    step.classList.add('visible');
+  };
+
+  function enterAs(type) {
+    localStorage.setItem('pklAccountType', type);
+    const step = document.getElementById('accountStep');
+    step.innerHTML = '<div style="text-align:center;color:#9CA3AF;font-size:13px;padding:14px 0;font-weight:500">Opening your dashboard…</div>';
+    setTimeout(() => { window.location.href = 'Partner_Dashboard-2.html'; }, 520);
+  }
+
+  function resetStep() {
+    const btn = document.getElementById('signInBtn');
+    const step = document.getElementById('accountStep');
+    btn.style.display = '';
+    step.classList.remove('visible');
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    showAccountStep();
+  });
+
+  document.getElementById('googleBtn').addEventListener('click', () => {
+    showAccountStep();
+  });
+</script>
+</body>
+</html>
