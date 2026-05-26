@@ -3612,7 +3612,7 @@ function App() {
   const [activeRole] = useState(() => localStorage.getItem('pklAccountType') || 'Advertiser'); // 'Advertiser' | 'Creator'
   const [creatorBalance, setCreatorBalance] = useState(3420);
   // Default verified when logging in as Creator; toggle Demo to explore unverified state
-  const [isCreatorVerified, setIsCreatorVerified] = useState(() => localStorage.getItem('pklAccountType') === 'Creator');
+  const [isCreatorVerified, setIsCreatorVerified] = useState(false);
   const currentTier = isCreatorVerified ? 1 : 0; // demo user only qualifies for Tier 1
   // Which tab is active inside the Profile view — Creator Program now lives here
   const [profileTab, setProfileTab] = useState('profile'); // 'profile' | 'program'
